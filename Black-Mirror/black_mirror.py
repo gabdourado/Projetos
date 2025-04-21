@@ -12,8 +12,8 @@ def print_lento_caractere(text, delay):
         sleep(delay)
 
 def print_lento_linha(text, delay):
-    for farse in text.split('\n'):
-        print(farse, end='\n', flush=True)
+    for frase in text.split('\n'):
+        print(frase, end='\n', flush=True)
         sleep(delay)
 
 opcoes = """
