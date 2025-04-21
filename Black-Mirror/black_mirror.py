@@ -6,12 +6,12 @@ from json import load, dump
 from random import choice
 from os import system
 
-def slow_print_character(text, delay):
+def print_lento_caractere(text, delay):
     for char in text:
         print(char, end='', flush=True)
         sleep(delay)
 
-def slow_print_frase(text, delay):
+def print_lento_linha(text, delay):
     for farse in text.split('\n'):
         print(farse, end='\n', flush=True)
         sleep(delay)
@@ -41,12 +41,12 @@ ______   _                  _       ___  ___  _
 \____/  |_|  \__,_|  \___| |_|\_\   \_|  |_/ |_| |_|    |_|     \___/  |_| 
 """
 
-    slow_print_character("...", 0.5)
+    print_lento_caractere("...", 0.5)
     sleep(0.75)
-    slow_print_character(ascii_art, 0.0025)
-    slow_print_character("\nBem-vindo ao gerenciador de episódios de Black Mirror:\n", 0.025)
+    print_lento_caractere(ascii_art, 0.0025)
+    print_lento_caractere("\nBem-vindo ao gerenciador de episódios de Black Mirror:\n", 0.025)
     sleep(0.25)
-    slow_print_frase(opcoes, 0.025)
+    print_lento_linha(opcoes, 0.025)
 
 def carregar_episodios():
     with open("episodios.json", "r", encoding="utf-8") as f:
@@ -64,9 +64,9 @@ def listar_episodios(episodios):
     for i in range(len(episodios)):
         table.add_row([episodios[i]['titulo'], episodios[i]['temporada'], episodios[i]['episodio'], episodios[i]['status']])
     
-    slow_print_frase(str(table), 0.025)
+    print_lento_linha(str(table), 0.025)
 
-def episodio_aleatorio(episodios):
+def sortear_episodio(episodios):
     nao_assistidos = [ep for ep in episodios if ep["status"] == "❌ Não assistido"]
 
     sorteado = choice(nao_assistidos)
@@ -75,7 +75,7 @@ def episodio_aleatorio(episodios):
     table.field_names = ["Titulo", "Temporada", "Episódio"]
     table.add_row([sorteado['titulo'], sorteado['temporada'], sorteado['episodio']])
     
-    slow_print_frase(str(table), 0.025)
+    print_lento_linha(str(table), 0.025)
 
 
 def encontrar_episodio(temp, ep, episodios):
@@ -96,7 +96,7 @@ def encontrar_episodio(temp, ep, episodios):
     return None
 
 
-def altera_status(episodios, temp, ep, flag):
+def alterar_status(episodios, temp, ep, flag):
     episodio = encontrar_episodio(temp, ep, episodios)
 
     if not episodio:
@@ -112,12 +112,12 @@ def altera_status(episodios, temp, ep, flag):
 
     salvar_episodios(episodios)
     
-def reseta_lista(episodios):
+def resetar_lista(episodios):
     for ep in episodios: ep['status'] = '❌ Não assistido'
-
+    print("Lista resetada!")
     salvar_episodios(episodios)
 
-def temp_e_ep():
+def receber_temp_ep():
     try:
         print("Temporada:")
         temp = int(input(">>> "))
@@ -126,7 +126,7 @@ def temp_e_ep():
         return temp, ep
     
     except ValueError:
-        print("Entrata inválida")
+        print("Entrata inválida! Escolha sua opção novamente.")
         return None, None
 
 def escolha(episodios):
@@ -138,23 +138,23 @@ def escolha(episodios):
                 listar_episodios(episodios)
 
             case "2":
-                episodio_aleatorio(episodios)
+                sortear_episodio(episodios)
 
             case "3":
-                temp, ep = temp_e_ep()
+                temp, ep = receber_temp_ep()
                 if temp and ep:
-                    altera_status(episodios, temp, ep, 3)
+                    alterar_status(episodios, temp, ep, 3)
 
             case "4":
-                temp, ep = temp_e_ep()
+                temp, ep = receber_temp_ep()
                 if temp and ep:
-                    altera_status(episodios, temp, ep, 4)
+                    alterar_status(episodios, temp, ep, 4)
 
             case "5":
                 print("Tem certeza que deseja alterar tudo? [y/n] ")
                 escolha = input(">>> ")
                 if escolha.lower() == 'y':
-                    reseta_lista(episodios)
+                    resetar_lista(episodios)
                 else:
                     continue
             case "q":
@@ -165,7 +165,7 @@ def escolha(episodios):
                 system('clear')
 
             case "help":
-                slow_print_frase(opcoes, 0.025)
+                print_lento_linha(opcoes, 0.025)
                 
             case _:
                 print("Opção inválida. Tente novamente.")
