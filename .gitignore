@@ -1,2 +1,5 @@
 # Ignorar ambientes virtuais
 venv/
+
+# Igonorar arquivos de configuração
+Assistente/.env

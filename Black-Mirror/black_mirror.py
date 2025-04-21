@@ -27,7 +27,7 @@ opcoes = """
 | [5] Resetar lista                          |
 | [q] Sair                                   |
 | [clear] Limpar a tela                      |
-| [help] Mostrar opções novamente            |                     
+| [help] Mostrar opções novamente            |
 +--------------------------------------------+
 """
 
