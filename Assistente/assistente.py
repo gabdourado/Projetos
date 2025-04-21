@@ -71,6 +71,7 @@ def menu():
                 assistente(personalidade)
                 print_lento_char("Saindo do chat...Tchau!", 0.025, "vermelho")
                 print_lento_char("Para ver novamente as opções use [help].", 0.025)
+                
             case "q":
                 print_lento_char("Saindo...", 0.025, )
                 break
@@ -95,6 +96,7 @@ def assistente(personalidade):
 
     try:
         client = Groq(api_key=api_key)
+
     except Exception:
         print_lento_char("Erro ao inicializar cliente Groq", 0.025)
         return
@@ -127,18 +129,19 @@ def assistente(personalidade):
         except RateLimitError:
             print_lento_char("Limite de requisições atingido. Tente novamente em breve.", 0.025)
             break
+
         except APIConnectionError:
             print_lento_char("Erro de conexão com a API da Groq. Verifique sua internet.", 0.025)
             break
+
         except GroqError:
             print_lento_char(f"Erro da API Groq", 0.025)
             break
+
         except Exception :
             print_lento_char(f"Erro inesperado", 0.025)
             break
 
-
 if __name__ == "__main__":
-
     intro()
     menu()
