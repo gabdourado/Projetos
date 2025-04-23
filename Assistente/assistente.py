@@ -97,7 +97,6 @@ def menu():
             case _:
                 print("Opção inválida. Tente novamente.\n")
 
-
 def assistente(personalidade):
     load_dotenv()
 
