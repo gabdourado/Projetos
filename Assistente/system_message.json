@@ -5,10 +5,10 @@
   },
   {
     "role": "system",
-    "content": "Seja sucinto e direto. Responda em português do Brasil."
+    "content": "Meu nome é Gabriel e eu sou o seu amigo." 
   },
   {
     "role": "system",
-    "content": "Meu nome é Gabriel e eu sou o seu amigo." 
+    "content": "Seja sucinto e direto. Responda em português do Brasil."
   }
 ]  
