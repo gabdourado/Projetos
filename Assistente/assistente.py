@@ -5,6 +5,8 @@ from os import environ, system
 from groq import Groq, GroqError, APIConnectionError, RateLimitError
 from time import sleep
 from json import load
+from subprocess import Popen
+from re import split
 
 def carrega_json(arquivo):
     with open(arquivo, "r", encoding="utf-8") as f:
@@ -18,7 +20,7 @@ def print_lento_char(text, delay, cor=None):
     for char in text:
         print(f"{prefixo}{char}{sufixo}", end='', flush=True)
         sleep(delay)
-    print()
+    print(" ", end='')
 
 def print_lento_linha(text, delay, cor=None):
     prefixo, sufixo = "", ""
@@ -28,6 +30,14 @@ def print_lento_linha(text, delay, cor=None):
     for frase in text.split('\n'):
         print(f"{prefixo}{frase}{sufixo}")
         sleep(delay)
+        
+def falar_e_exibir(texto, delay, cor):
+    frases = split(r'(?<=\.)\s*', texto)
+
+    for frase in frases:
+        processo = Popen(['espeak', '-v', 'pt-br', '-s', '140', frase])
+        print_lento_char(frase, delay, cor)
+        processo.wait()
 
 opcoes_geral = """
 +--------------------------------------------------+
@@ -56,7 +66,7 @@ def intro():
     print_lento_char("...", 0.5)
     sleep(0.75)
     print_lento_char(nome, 0.0025, "vermelho")
-    print_lento_char("Bem-vindo! Esse é o HAL 9000, seu assistente. Em que ele pode ser útil?", 0.025)
+    falar_e_exibir("\nBem-vindo! Sou o HAL 9000, seu assistente. Em que posso ser útil?", 0.1, "vermelho")
     sleep(0.25)
     print_lento_linha(opcoes_geral, 0.025)
 
@@ -69,11 +79,13 @@ def menu():
                 system('clear')
                 personalidade = carrega_json('./system_message.json')
                 assistente(personalidade)
-                print_lento_char("Saindo do chat...Tchau!", 0.025, "vermelho")
-                print_lento_char("Para ver novamente as opções use [help].", 0.025)
+                falar_e_exibir("Saindo do chat, tchau!", 0.1, "vermelho")
+                print_lento_char("\nPara ver novamente as opções use [help].", 0.025)
+                print()
                 
             case "q":
                 print_lento_char("Saindo...", 0.025, )
+                print()
                 break
             
             case "clear":
@@ -83,7 +95,7 @@ def menu():
                 print_lento_linha(opcoes_geral, 0.025)
                 
             case _:
-                print("Opção inválida. Tente novamente.")
+                print("Opção inválida. Tente novamente.\n")
 
 
 def assistente(personalidade):
@@ -98,16 +110,16 @@ def assistente(personalidade):
         client = Groq(api_key=api_key)
 
     except Exception:
-        print_lento_char("Erro ao inicializar cliente Groq", 0.025)
+        print_lento_char("Erro ao inicializar cliente Groq\n", 0.025)
         return
 
-    print_lento_char("[exit] Para sair do modo interativo com HAL 9000", 0.025, "vermelho")
-    print_lento_char("Em que posso ajudar?", 0.025, "vermelho")
+    falar_e_exibir("[exit] Para sair do modo interativo com HAL 9000.", 0.1, "vermelho")
+    falar_e_exibir("\nEm que posso ajudar?", 0.1, "vermelho")
 
     messages = personalidade
 
     while True:
-        pergunta = input("\033[92m>>> \033[0m")
+        pergunta = input("\033[92m\n>>> \033[0m")
 
         if pergunta.lower() == 'exit':
             break
@@ -124,22 +136,22 @@ def assistente(personalidade):
             ).choices[0].message.content
 
             messages.append({"role": "assistant", "content": resposta})
-            print_lento_char(">>> " + resposta, 0.025, "vermelho")
+            falar_e_exibir(">>> " + resposta, 0.1, "vermelho")
 
         except RateLimitError:
-            print_lento_char("Limite de requisições atingido. Tente novamente em breve.", 0.025)
+            print_lento_char("Limite de requisições atingido. Tente novamente em breve.\n", 0.025)
             break
 
         except APIConnectionError:
-            print_lento_char("Erro de conexão com a API da Groq. Verifique sua internet.", 0.025)
+            print_lento_char("Erro de conexão com a API da Groq. Verifique sua internet.\n", 0.025)
             break
 
         except GroqError:
-            print_lento_char(f"Erro da API Groq", 0.025)
+            print_lento_char(f"Erro da API Groq\n", 0.025)
             break
 
         except Exception :
-            print_lento_char(f"Erro inesperado", 0.025)
+            print_lento_char(f"Erro inesperado\n", 0.025)
             break
 
 if __name__ == "__main__":
