@@ -2,7 +2,7 @@
 venv/
 
 # Igonorar arquivos de configuração
-Assistente/.env
+Arnim-Zola/.env
 
 # Ignorar arquivos de teste :/
-Assistente/teste.py
+Arnim-Zola/teste.py
