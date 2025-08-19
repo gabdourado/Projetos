@@ -1,8 +1,2 @@
 # Ignorar ambientes virtuais
 venv/
-
-# Igonorar arquivos de configuração
-Arnim-Zola/.env
-
-# Ignorar arquivos de teste :/
-Arnim-Zola/teste.py
